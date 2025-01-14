@@ -3,6 +3,7 @@ import Phaser from 'phaser'
 export default class MainScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite
   private platforms!: Phaser.Physics.Arcade.StaticGroup
+  private boxes!: Phaser.Physics.Arcade.Group
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
 
   constructor() {
@@ -17,6 +18,7 @@ export default class MainScene extends Phaser.Scene {
     // Create colored rectangles programmatically
     this.createColoredRectangle('ground', 400, 32, 0x00ff00) // Green platform
     this.createColoredRectangle('player', 32, 48, 0x0000ff) // Blue player
+    this.createColoredRectangle('box', 40, 40, 0x8B4513) // Brown box
   }
 
   createColoredRectangle(key: string, width: number, height: number, color: number) {
@@ -44,8 +46,24 @@ export default class MainScene extends Phaser.Scene {
     this.player.setBounce(0.2)
     this.player.setCollideWorldBounds(true)
 
+    // Create boxes group
+    this.boxes = this.physics.add.group({
+      bounceX: 0.1,
+      bounceY: 0.1,
+      dragX: 100
+    })
+
+    // Add some boxes to the scene
+    this.boxes.create(300, 500, 'box')
+    this.boxes.create(500, 350, 'box')
+    this.boxes.create(150, 200, 'box')
+    this.boxes.create(700, 170, 'box')
+    this.boxes.create(650, 500, 'box')
+
     // Player physics
     this.physics.add.collider(this.player, this.platforms)
+    this.physics.add.collider(this.boxes, this.platforms)
+    this.physics.add.collider(this.player, this.boxes)
 
     // Create cursor keys
     this.cursors = this.input.keyboard!.createCursorKeys()
@@ -56,7 +74,7 @@ export default class MainScene extends Phaser.Scene {
       color: '#ffffff'
     })
 
-    this.add.text(16, 60, 'Use arrow keys to move', {
+    this.add.text(16, 60, 'Use arrow keys to move and push boxes', {
       fontSize: '16px',
       color: '#ffffff'
     })
