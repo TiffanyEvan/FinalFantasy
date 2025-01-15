@@ -74,10 +74,24 @@ export default class MainScene extends Phaser.Scene {
       color: '#ffffff'
     })
 
-    this.add.text(16, 60, 'Use arrow keys to move and push boxes', {
-      fontSize: '16px',
-      color: '#ffffff'
-    })
+    // Display player name if available
+    const playerName = this.registry.get('playerName')
+    if (playerName) {
+      this.add.text(16, 60, `玩家: ${playerName}`, {
+        fontSize: '20px',
+        color: '#ffff00'
+      })
+      
+      this.add.text(16, 90, 'Use arrow keys to move and push boxes', {
+        fontSize: '16px',
+        color: '#ffffff'
+      })
+    } else {
+      this.add.text(16, 60, 'Use arrow keys to move and push boxes', {
+        fontSize: '16px',
+        color: '#ffffff'
+      })
+    }
   }
 
   update() {

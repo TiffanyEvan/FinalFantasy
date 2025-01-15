@@ -2,7 +2,11 @@ import { useEffect, useRef } from 'react'
 import Phaser from 'phaser'
 import gameConfig from '../game/config'
 
-const GameComponent = () => {
+interface GameComponentProps {
+  playerName?: string
+}
+
+const GameComponent = ({ playerName }: GameComponentProps) => {
   const gameRef = useRef<HTMLDivElement>(null)
   const phaserGameRef = useRef<Phaser.Game | null>(null)
 
@@ -14,6 +18,11 @@ const GameComponent = () => {
       }
       
       phaserGameRef.current = new Phaser.Game(config)
+      
+      // Pass player name to the game scene
+      if (playerName) {
+        phaserGameRef.current.registry.set('playerName', playerName)
+      }
     }
 
     return () => {
@@ -27,6 +36,11 @@ const GameComponent = () => {
   return (
     <div>
       <h2>Final Fantasy Game</h2>
+      {playerName && (
+        <p style={{ textAlign: 'center', fontSize: '18px', color: '#646cff' }}>
+          玩家: {playerName}
+        </p>
+      )}
       <div 
         ref={gameRef} 
         id="game-container"
